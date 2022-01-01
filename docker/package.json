@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "up": "docker-compose up -d",
+    "attach": "docker-compose logs -f",
+    "stop": "docker stop tiny-url-mongo tiny-url-express",
+    "soft-restart": "docker restart tiny-url-mongo tiny-url-express",
+    "restart": "npm run rm && npm run up",
+    "ls": "docker ps -a",
+    "rm": "docker rm -f tiny-url-mongo tiny-url-express || true"
+  }
+}
