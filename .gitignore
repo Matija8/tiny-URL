@@ -44,3 +44,8 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Prevent dependabot alerts - Matija
+# Remove this if using for prod apps later.
+package-lock.json
+yarn.lock
