@@ -8,10 +8,12 @@ import {
   MongoError,
 } from 'mongodb';
 
-const gDBName = 'production';
-
 class MongoDB {
-  private client = MongoDB.createMongoClient();
+  private client: Promise<MongoClient>;
+
+  constructor(connectionUri: string, private dbName: string) {
+    this.client = MongoDB.createMongoClient(connectionUri);
+  }
 
   public async find<T>(
     collectionName: string,
@@ -19,7 +21,7 @@ class MongoDB {
     options?: FindOptions
   ) {
     const collection = await this.getMongoCollection(collectionName);
-    return collection.find(query, options) as FindCursor<T>;
+    return collection.find(query, options) as any as FindCursor<T>; // TODO
   }
 
   public async findOne<T>(
@@ -32,33 +34,41 @@ class MongoDB {
   }
 
   public async getMongoCollection(collectionName: string) {
-    return (await this.client).db(gDBName).collection(collectionName);
+    return (await this.client).db(this.dbName).collection(collectionName);
   }
 
   public async close() {
     return (await this.client).close();
   }
 
-  private static async createMongoClient() {
-    const url = getMongoServerConnectionString()[gDBName];
+  private static async createMongoClient(
+    connectionUri: string
+  ): Promise<MongoClient> {
     const options: MongoClientOptions = {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as MongoClientOptions; // TODO
     try {
-      const mongoClient = await MongoClient.connect(url, options);
+      const mongoClient = await MongoClient.connect(connectionUri, options);
+      console.debug('Mongo client connected');
       return mongoClient;
     } catch (err) {
       if (err instanceof MongoError) {
-        console.debug('\n\nDid you forget to turn on your VPN?\n');
+        console.error('\n\nFailed to connect to mongo client\n');
       }
       throw err;
     }
   }
 }
 
-function getMongoServerConnectionString(): { [key: string]: string } {
-  return { todo: 'TODO' };
+function getMongoServerConnectionString(): string {
+  // TODO: Don't hardcode username & password
+  // Get from env
+  // Also you won't use localhost later on.
+  return 'mongodb://root:example@localhost:27017/';
 }
 
-export const mongoDB = new MongoDB();
+export const mongoDB = new MongoDB(
+  getMongoServerConnectionString(),
+  'tiny-url-db'
+);
