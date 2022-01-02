@@ -1,0 +1,44 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "modules": true
+    }
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["@typescript-eslint"],
+  "env": {
+    "es6": true,
+    "node": true
+  },
+
+  "rules": {
+    "brace-style": ["warn", "1tbs"],
+    "indent": ["warn", 2],
+    "lines-between-class-members": ["warn"],
+    "max-len": ["warn", { "code": 80, "ignoreUrls": true }],
+    "no-bitwise": ["warn"],
+    "no-console": ["warn"],
+    "no-constant-condition": ["error", { "checkLoops": false }],
+    "no-empty": ["warn", { "allowEmptyCatch": true }],
+    "no-param-reassign": ["warn", { "props": false }],
+    "no-plusplus": ["warn", { "allowForLoopAfterthoughts": true }],
+    "no-unused-vars": ["off"],
+    "no-use-before-define": ["off"],
+    "object-shorthand": ["warn", "always"],
+    "prefer-const": ["warn"],
+    "quotes": ["warn", "single", { "avoidEscape": true }],
+    "semi": ["warn", "always"],
+
+    "@typescript-eslint/explicit-module-boundary-types": ["warn"],
+    "@typescript-eslint/no-unused-vars": ["warn"],
+    "@typescript-eslint/no-use-before-define": ["error", { "functions": false }]
+  }
+}
