@@ -1,0 +1,54 @@
+<div class="contained">
+  <mat-card style="display: flex; flex-direction: column; gap: 10px">
+    <mat-card-title> Tiny Url </mat-card-title>
+
+    <mat-form-field appearance="standard">
+      <h3>Enter a long URL to make a TinyURL</h3>
+      <input
+        matInput
+        class="width-100"
+        placeholder="Your link"
+        [(ngModel)]="longUrl"
+      />
+    </mat-form-field>
+
+    <h3>Short link</h3>
+    <div class="width-100" style="display: flex; align-items: center">
+      <div class="flex-grow-1">
+        <mat-form-field appearance="standard" class="width-100">
+          <input
+            matInput
+            placeholder="We will display the shortened link here"
+            [value]="shortUrl"
+            [readonly]="true"
+          />
+          <!-- <mat-hint>Hint</mat-hint> -->
+        </mat-form-field>
+      </div>
+      <mat-icon (click)="this.copyToClipboard()" style="cursor: pointer"
+        >content_copy</mat-icon
+      >
+    </div>
+
+    <mat-card-actions>
+      <button
+        mat-raised-button
+        (click)="this.shortenUrl()"
+        color="primary"
+        class="width-100"
+        [disabled]="this.btnDisabled()"
+      >
+        <div
+          *ngIf="this.saving; else elseBlock"
+          style="display: flex; justify-content: center; padding: 10px"
+        >
+          <mat-progress-spinner
+            [mode]="'indeterminate'"
+            [diameter]="40"
+          ></mat-progress-spinner>
+        </div>
+        <ng-template #elseBlock> Make TinyURL! </ng-template>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

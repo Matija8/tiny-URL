@@ -10,15 +10,18 @@
     "dev:ssr": "ng run tinyURL:serve-ssr",
     "serve:ssr": "node dist/tinyURL/server/main.js",
     "build:ssr": "ng build && ng run tinyURL:server",
-    "prerender": "ng run tinyURL:prerender"
+    "prerender": "ng run tinyURL:prerender",
+    "postinstall": "ngcc"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.0.0",
+    "@angular/cdk": "13.1.1",
     "@angular/common": "~13.0.0",
     "@angular/compiler": "~13.0.0",
     "@angular/core": "~13.0.0",
     "@angular/forms": "~13.0.0",
+    "@angular/material": "13.1.1",
     "@angular/platform-browser": "~13.0.0",
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/platform-server": "~13.0.0",

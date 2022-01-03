@@ -15,7 +15,7 @@ export function getUrlRouter(): express.Router {
     }
     // Debug only
     // if (!urlService.isUrlValid(longUrl)) throw Error('Invalid long url');
-    res.redirect(longUrl);
+    res.redirect(301, longUrl);
   });
 
   router.post('/shortenUrl', async (req, res) => {
