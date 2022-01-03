@@ -1,17 +1,20 @@
 import {
+  Collection,
   Document,
   Filter,
   FindCursor,
   FindOptions,
+  InsertOneResult,
   MongoClient,
   MongoClientOptions,
   MongoError,
+  ObjectId,
 } from 'mongodb';
 
 class MongoDB {
   private client: Promise<MongoClient>;
 
-  constructor(connectionUri: string, private dbName: string) {
+  constructor(connectionUri: string, private defaultDbName: string) {
     this.client = MongoDB.createMongoClient(connectionUri);
   }
 
@@ -19,22 +22,34 @@ class MongoDB {
     collectionName: string,
     query: Filter<Document>,
     options?: FindOptions
-  ) {
-    const collection = await this.getMongoCollection(collectionName);
-    return collection.find(query, options) as any as FindCursor<T>; // TODO
+  ): Promise<FindCursor<T>> {
+    const collection = await this.getCollection(collectionName);
+    return collection.find<T>(query, options);
   }
 
   public async findOne<T>(
     collectionName: string,
     query: Filter<Document>,
     options?: FindOptions
-  ) {
-    const collection = await this.getMongoCollection(collectionName);
-    return collection.findOne(query, options) as Promise<T | null>;
+  ): Promise<T | null> {
+    const collection = await this.getCollection(collectionName);
+    return collection.findOne<T>(query, options);
   }
 
-  public async getMongoCollection(collectionName: string) {
-    return (await this.client).db(this.dbName).collection(collectionName);
+  public async insertOne(
+    collectionName: string,
+    doc: Document & { _id?: ObjectId | undefined }
+  ): Promise<InsertOneResult<Document>> {
+    const collection = await this.getCollection(collectionName);
+    return collection.insertOne(doc);
+  }
+
+  public async getCollection(
+    collectionName: string
+  ): Promise<Collection<Document>> {
+    return (await this.client)
+      .db(this.defaultDbName)
+      .collection(collectionName);
   }
 
   public async close() {
