@@ -15,7 +15,7 @@ export function getUrlRouter(): express.Router {
     }
 
     // No need to await
-    urlService.updateTimesUsed(longUrl);
+    urlService.updateTimesUsed(shortUrl);
 
     // Debug only
     // if (!urlService.isUrlValid(longUrl)) throw Error('Invalid long url');

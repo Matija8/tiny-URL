@@ -58,7 +58,7 @@ export class TinyUrlService {
 
   async getMostUpdated(limit = 100): Promise<UrlDbObject[]> {
     return await (await mongoDB.find<UrlDbObject>(this.collection, {}))
-      .sort({ timesUsedCounter: 1 })
+      .sort({ timesUsedCounter: -1 })
       .limit(limit)
       .toArray();
   }
