@@ -41,20 +41,20 @@
 
         The tiers of the architecture are:
 
-            1) Client tier - Our angular app This scales easily since we can
-            prerender the app and host it on a cdn (Amazon CloudFront, Google
-            Cloud CDN...)
+            1) Client tier - Our angular app
+                This scales easily since we can prerender the app and host it on
+                a cdn (Amazon CloudFront, Google Cloud CDN...)
 
-            1) Server tier - Our api
-               This can also be pretty easily scaled since
-               are api is stateless.
+            2) Server tier - Our api
+                This can also be pretty easily scaled since our apis are stateless.
 
-            2) Database tier - This is the tricky part. At a certain point
-            vertical scaling becomes impractical, and later even impossible, so
-            we need to think of a distributed solution. We can use sharding on
-            the long urls as a sharding key, since the long urls should be
-            unique and have a unique corresponding short url. We can traffic the
-            requests to correct servers by using a load balancer
+            3) Database tier - This is the tricky part.
+                At a certain point vertical scaling becomes impractical, and
+                later even impossible, so we need to think of a distributed
+                solution. We can use sharding on the long urls as a sharding
+                key, since the long urls should be unique and have a unique
+                corresponding short url. We can traffic the requests to correct
+                servers by using a load balancer
 
         We can also add a caching layer and a rate limiter.
 
