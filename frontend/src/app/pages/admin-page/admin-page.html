@@ -2,7 +2,7 @@
   <mat-card style="display: flex; flex-direction: column; gap: 10px">
     <mat-card-title> Url Analytics </mat-card-title>
 
-    <container-element [ngSwitch]="this.urlObjects">
+    <container-element [ngSwitch]="this.items">
       <div *ngSwitchCase="'loading'" class="centered-flex-columns">
         <h3>Fetching data...</h3>
         <mat-progress-spinner
@@ -19,7 +19,7 @@
       <table
         *ngSwitchDefault
         mat-table
-        [dataSource]="this.getUrlObjectsAsArr()"
+        [dataSource]="this.getItemsAsArr()"
         style="width: 100%"
       >
         <ng-container matColumnDef="position">
@@ -27,20 +27,15 @@
           <td mat-cell *matCellDef="let element">{{element.position}}</td>
         </ng-container>
 
-        <ng-container matColumnDef="longUrl">
-          <th mat-header-cell *matHeaderCellDef>Long URL</th>
-          <td mat-cell *matCellDef="let element">{{element.longUrl}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="shortUrl">
-          <th mat-header-cell *matHeaderCellDef>Short URL</th>
-          <td mat-cell *matCellDef="let element">{{element.shortUrl}}</td>
+        <ng-container matColumnDef="domain">
+          <th mat-header-cell *matHeaderCellDef>Domain</th>
+          <td mat-cell *matCellDef="let element">{{element._id}}</td>
         </ng-container>
 
         <ng-container matColumnDef="timesUsed">
           <th mat-header-cell *matHeaderCellDef>Times used</th>
           <td mat-cell *matCellDef="let element">
-            {{element.timesUsedCounter}}
+            {{element.total}}
           </td>
         </ng-container>
 

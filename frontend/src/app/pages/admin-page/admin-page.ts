@@ -15,8 +15,8 @@ import { TinyUrlService } from 'src/app/services/tiny-url.service';
 })
 export class AdminPage {
   title = 'tinyURL-admin';
-  urlObjects: any[] | 'loading' | 'failed' = 'loading';
-  displayedColumns = ['position', 'longUrl', 'shortUrl', 'timesUsed'];
+  items: any[] | 'loading' | 'failed' = 'loading';
+  displayedColumns = ['position', 'domain', 'timesUsed'];
 
   constructor(
     private tinyUrlService: TinyUrlService,
@@ -25,18 +25,18 @@ export class AdminPage {
 
   async ngOnInit() {
     try {
-      this.urlObjects = (await this.tinyUrlService.getAnalytics()).map(
+      this.items = (await this.tinyUrlService.getAnalytics()).map(
         (obj, idx) => ({ ...obj, position: idx + 1 }),
       );
     } catch (err) {
-      this.urlObjects = 'failed';
+      this.items = 'failed';
       console.log(err);
     }
   }
 
-  getUrlObjectsAsArr() {
-    if (Array.isArray(this.urlObjects)) {
-      return this.urlObjects;
+  getItemsAsArr() {
+    if (Array.isArray(this.items)) {
+      return this.items;
     }
     return [];
   }

@@ -1,9 +1,11 @@
 import express from 'express';
+import { Last24HService } from '../services/last-24h-service';
 import { TinyUrlService } from '../services/tiny-url-service';
 
 export function getUrlRouter(): express.Router {
   const router = express.Router();
   const urlService = new TinyUrlService();
+  const last24hService = new Last24HService();
 
   router.get('/:shortUrl', async (req, res) => {
     const shortUrl = req.params.shortUrl;
@@ -15,7 +17,7 @@ export function getUrlRouter(): express.Router {
     }
 
     // No need to await
-    urlService.updateTimesUsed(shortUrl);
+    last24hService.addDomainCall(longUrl);
 
     // Debug only
     // if (!urlService.isUrlValid(longUrl)) throw Error('Invalid long url');
@@ -45,7 +47,7 @@ export function getUrlRouter(): express.Router {
 
   router.post('/getAnalytics', async (req, res) => {
     try {
-      const data = await urlService.getMostUpdated();
+      const data = await last24hService.getMostUsedDomains();
       res.json(data);
     } catch (err) {
       res.status(500).json({ error: 'Get failed' });
