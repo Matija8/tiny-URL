@@ -25,7 +25,11 @@
           <!-- <mat-hint>Hint</mat-hint> -->
         </mat-form-field>
       </div>
-      <mat-icon (click)="this.copyToClipboard()" style="cursor: pointer"
+      <mat-icon
+        (click)="this.copyToClipboard()"
+        style="cursor: pointer"
+        matTooltip="Copy to clipboard"
+        [matTooltipPosition]="'above'"
         >content_copy</mat-icon
       >
     </div>
@@ -36,15 +40,22 @@
         (click)="this.shortenUrl()"
         color="primary"
         class="width-100"
+        style="height: 40px"
         [disabled]="this.btnDisabled()"
       >
         <div
           *ngIf="this.saving; else elseBlock"
-          style="display: flex; justify-content: center; padding: 10px"
+          style="
+            display: flex;
+            justify-content: center;
+            padding: 5px;
+            height: 30px;
+          "
         >
           <mat-progress-spinner
             [mode]="'indeterminate'"
-            [diameter]="40"
+            [diameter]="25"
+            color="accent"
           ></mat-progress-spinner>
         </div>
         <ng-template #elseBlock> Make TinyURL! </ng-template>

@@ -1,10 +1,6 @@
-const adminCollectionName = 'Admin';
-db.createCollection(adminCollectionName);
+const urlCollectionName = 'TinyURL';
+db.createCollection(urlCollectionName);
 
-const adminCollection = db.getCollection(adminCollectionName);
-adminCollection.insert({
-  username: 'admin',
-  pass: 'admin', // TODO: hash + salt
-});
-
-const urlCollection = db.createCollection('TinyURL');
+const urlCollection = db.getCollection(urlCollectionName);
+// longUrls will be unique now.
+urlCollection.createIndex({ longUrl: 1 }, { unique: true });

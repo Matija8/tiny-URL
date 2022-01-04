@@ -1,6 +1,6 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input } from '@angular/core';
-// import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TinyUrlService } from 'src/app/services/tiny-url.service';
 
 @Component({
@@ -14,7 +14,7 @@ export class MainPage {
 
   constructor(
     private tinyUrlService: TinyUrlService,
-    // private snackBarService: MatSnackBar,
+    private snackBarService: MatSnackBar,
     private clipboard: Clipboard,
   ) {}
 
@@ -22,6 +22,7 @@ export class MainPage {
     try {
       this.saving = true;
       const response = await this.tinyUrlService.shortenUrl(this.longUrl);
+      // await new Promise((resolve) => setTimeout(resolve, 5000)); // Test spinner
       const shortUrl = response.shortUrl;
       if (typeof shortUrl !== 'string') {
         throw Error(`Expected shortUrl to be a string, got ${typeof shortUrl}`);
@@ -37,10 +38,14 @@ export class MainPage {
 
   copyToClipboard() {
     if (!this.shortUrl) {
+      this.snackBarService.open(`Copy to clipboard failed!`, 'Close');
       return;
     }
     this.clipboard.copy(this.shortUrl);
-    // this.snackBarService.open(`Copied ${this.shortUrl} link to clipboard!`);
+    this.snackBarService.open(
+      `Copied ${this.shortUrl} link to clipboard!`,
+      'Close',
+    );
   }
 
   btnDisabled() {
