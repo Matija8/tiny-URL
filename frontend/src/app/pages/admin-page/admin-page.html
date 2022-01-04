@@ -1,11 +1,34 @@
-<div class="contained">
+<div class="contained" style="width: 80%; max-width: 1200px">
   <mat-card style="display: flex; flex-direction: column; gap: 10px">
-    <mat-card-title> Tiny Url </mat-card-title>
+    <mat-card-title> Url Analytics </mat-card-title>
 
-    <mat-list>
-      <mat-list-item> Item 1 TODO </mat-list-item>
-      <mat-list-item> Item 2 TODO </mat-list-item>
-      <mat-list-item> Item 3 TODO </mat-list-item>
-    </mat-list>
+    <table mat-table [dataSource]="urlObjects" style="width: 100%">
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell *matCellDef="let element">{{element.position}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="longUrl">
+        <th mat-header-cell *matHeaderCellDef>Long URL</th>
+        <td mat-cell *matCellDef="let element">{{element.longUrl}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="shortUrl">
+        <th mat-header-cell *matHeaderCellDef>Short URL</th>
+        <td mat-cell *matCellDef="let element">{{element.shortUrl}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="timesUsed">
+        <th mat-header-cell *matHeaderCellDef>Times used</th>
+        <td mat-cell *matCellDef="let element">{{element.timesUsedCounter}}</td>
+      </ng-container>
+
+      <tr
+        mat-header-row
+        *matHeaderRowDef="displayedColumns"
+        style="margin: 10px"
+      ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </mat-card>
 </div>

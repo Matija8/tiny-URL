@@ -35,8 +35,11 @@
     5. Try to suggest some ideas for advanced features.
 
         TODO
-        - Allowing users to make their own profiles to track the links they
+        - Allow users to make their own profiles to track the links they
           shortened and how much those links were used. Not only the admins.
+        - Allow organizations to group urls by certain parameters,
+            so they can later extract better analytics
+            (grouping types of urls, comparing the groups...)
 
 ## Part 2
 
