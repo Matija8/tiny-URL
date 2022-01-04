@@ -10,8 +10,7 @@
     "dev:ssr": "ng run tinyURL:serve-ssr",
     "serve:ssr": "node dist/tinyURL/server/main.js",
     "build:ssr": "ng build && ng run tinyURL:server",
-    "prerender": "ng run tinyURL:prerender",
-    "postinstall": "ngcc"
+    "prerender": "ng run tinyURL:prerender"
   },
   "private": true,
   "dependencies": {

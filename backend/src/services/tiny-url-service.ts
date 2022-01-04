@@ -1,4 +1,4 @@
-import { UpdateResult } from 'mongodb';
+import { MongoServerError, UpdateResult } from 'mongodb';
 import { mongoDB } from './mongo-db-service';
 
 interface UrlDbObject {
@@ -25,21 +25,16 @@ export class TinyUrlService {
       throw Error('insertLongUrl failed - Invalid url');
     }
 
-    const shortUrlAlreadyInDb = await this.findShortUrl(longUrl);
+    const shortUrlAlreadyInDb = await this.findShortUrlForLongUrl(longUrl);
     if (shortUrlAlreadyInDb) {
       return shortUrlAlreadyInDb;
     }
+    const { shortUrl, response } = await this.tryInsert(longUrl);
 
-    const shortUrl = this.makeRandomShortId();
-    const response = await mongoDB.insertOne(this.collection, {
-      shortUrl,
-      longUrl,
-      timesUsedCounter: 0,
-      // validUntil: (new Date()) // TODO
-    });
     if (!response.acknowledged) {
       throw Error('insertLongUrl failed - Server error');
     }
+
     return shortUrl;
   }
   // TODO: shortURL/longURL index for faster search?
@@ -63,13 +58,39 @@ export class TinyUrlService {
       .toArray();
   }
 
-  private async findShortUrl(longUrl: string): Promise<string | undefined> {
+  private async findShortUrlForLongUrl(
+    longUrl: string,
+  ): Promise<string | undefined> {
     const doc = await mongoDB.findOne<UrlDbObject>(
       this.collection,
       { longUrl },
       { projection: { shortUrl: 1 } },
     );
     return doc?.shortUrl;
+  }
+
+  private async tryInsert(longUrl: string, retryCount = 3) {
+    for (let i = 0; i < retryCount; i++) {
+      try {
+        const shortUrl = this.makeRandomShortId();
+        const response = await mongoDB.insertOne(this.collection, {
+          shortUrl,
+          longUrl,
+          timesUsedCounter: 0,
+          // validUntil: (new Date()) // TODO
+        });
+        return { response, shortUrl };
+      } catch (err: any) {
+        const isShortUrlDuplicateError =
+          err instanceof MongoServerError &&
+          err?.code === 11000 &&
+          err?.keyPattern?.shortUrl === 1;
+        if (!isShortUrlDuplicateError) {
+          throw err;
+        }
+      }
+    }
+    throw Error(`Failed ${retryCount} times to make a unique shortUrl`);
   }
 
   private makeRandomShortId(length = 7) {

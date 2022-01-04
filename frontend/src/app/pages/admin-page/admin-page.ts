@@ -15,7 +15,7 @@ import { TinyUrlService } from 'src/app/services/tiny-url.service';
 })
 export class AdminPage {
   title = 'tinyURL-admin';
-  urlObjects: any[] = [];
+  urlObjects: any[] | 'loading' | 'failed' = 'loading';
   displayedColumns = ['position', 'longUrl', 'shortUrl', 'timesUsed'];
 
   constructor(
@@ -29,8 +29,15 @@ export class AdminPage {
         (obj, idx) => ({ ...obj, position: idx + 1 }),
       );
     } catch (err) {
-      alert('Failed to fetch most used url-s');
+      this.urlObjects = 'failed';
       console.log(err);
     }
+  }
+
+  getUrlObjectsAsArr() {
+    if (Array.isArray(this.urlObjects)) {
+      return this.urlObjects;
+    }
+    return [];
   }
 }

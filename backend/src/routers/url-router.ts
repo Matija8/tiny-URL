@@ -37,6 +37,7 @@ export function getUrlRouter(): express.Router {
       console.log('Shortened a longUrl', { longUrl, shortUrl });
       res.json({ shortUrl });
     } catch (err) {
+      console.error('Insert failed!', err);
       res.status(500).json({ error: 'Insert failed' });
       // TODO: Log to fs based on error type.
     }

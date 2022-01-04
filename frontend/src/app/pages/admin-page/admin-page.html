@@ -2,33 +2,55 @@
   <mat-card style="display: flex; flex-direction: column; gap: 10px">
     <mat-card-title> Url Analytics </mat-card-title>
 
-    <table mat-table [dataSource]="urlObjects" style="width: 100%">
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef>No.</th>
-        <td mat-cell *matCellDef="let element">{{element.position}}</td>
-      </ng-container>
+    <container-element [ngSwitch]="this.urlObjects">
+      <div *ngSwitchCase="'loading'" class="centered-flex-columns">
+        <h3>Fetching data...</h3>
+        <mat-progress-spinner
+          [mode]="'indeterminate'"
+          [diameter]="45"
+          color="accent"
+        ></mat-progress-spinner>
+      </div>
 
-      <ng-container matColumnDef="longUrl">
-        <th mat-header-cell *matHeaderCellDef>Long URL</th>
-        <td mat-cell *matCellDef="let element">{{element.longUrl}}</td>
-      </ng-container>
+      <div *ngSwitchCase="'failed'" class="centered-flex-columns">
+        <h3>Data fetch failed</h3>
+      </div>
 
-      <ng-container matColumnDef="shortUrl">
-        <th mat-header-cell *matHeaderCellDef>Short URL</th>
-        <td mat-cell *matCellDef="let element">{{element.shortUrl}}</td>
-      </ng-container>
+      <table
+        *ngSwitchDefault
+        mat-table
+        [dataSource]="this.getUrlObjectsAsArr()"
+        style="width: 100%"
+      >
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef>No.</th>
+          <td mat-cell *matCellDef="let element">{{element.position}}</td>
+        </ng-container>
 
-      <ng-container matColumnDef="timesUsed">
-        <th mat-header-cell *matHeaderCellDef>Times used</th>
-        <td mat-cell *matCellDef="let element">{{element.timesUsedCounter}}</td>
-      </ng-container>
+        <ng-container matColumnDef="longUrl">
+          <th mat-header-cell *matHeaderCellDef>Long URL</th>
+          <td mat-cell *matCellDef="let element">{{element.longUrl}}</td>
+        </ng-container>
 
-      <tr
-        mat-header-row
-        *matHeaderRowDef="displayedColumns"
-        style="margin: 10px"
-      ></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
+        <ng-container matColumnDef="shortUrl">
+          <th mat-header-cell *matHeaderCellDef>Short URL</th>
+          <td mat-cell *matCellDef="let element">{{element.shortUrl}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="timesUsed">
+          <th mat-header-cell *matHeaderCellDef>Times used</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.timesUsedCounter}}
+          </td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns"
+          style="margin: 10px"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </container-element>
   </mat-card>
 </div>
